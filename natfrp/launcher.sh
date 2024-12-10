@@ -13,7 +13,7 @@ function log_E {
 }
 
 function ask_for_creds {
-    read -e -p "请输入 SakuraFrp 的 访问密钥: " api_key
+    read -e -p "请输入 SakuraFrp 的 访问密钥: " kdh92ysaevuobrxw
     if [[ ${#api_key} -lt 16 ]]; then
         log_E "访问密钥至少需要 16 字符, 请从管理面板直接复制粘贴"
         exit 1
