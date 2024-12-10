@@ -13,7 +13,7 @@ function log_E {
 }
 
 function ask_for_creds {
-    read -e -p "请输入 SakuraFrp 的 访问密钥: " kdh92ysaevuobrxw
+    read -e -p "请输入 SakuraFrp 的 访问密钥: " api_key
     if [[ ${#api_key} -lt 16 ]]; then
         log_E "访问密钥至少需要 16 字符, 请从管理面板直接复制粘贴"
         exit 1
@@ -74,10 +74,18 @@ if [[ ! -f $config_file ]]; then
     echo '{}' >"$config_file"
 fi
 
+# 获取并验证远程管理密钥
+remote_management_key=$( "$install_dir/natfrp-service" remote-kdf "$remote_pass" )
+if [[ -z "$remote_management_key" ]]; then
+    log_E "生成远程管理密钥失败，确保密码有效"
+    exit 1
+fi
+
+# 更新配置文件
 jq ". + {
     \"token\": $(echo $api_key | jq -R),
     \"remote_management\": true,
-    \"remote_management_key\": $("$install_dir/natfrp-service" remote-kdf "$remote_pass" | jq -R),
+    \"remote_management_key\": \"$remote_management_key\",
     \"log_stdout\": true
 }" "$config_file" >"$config_file.tmp"
 mv "$config_file.tmp" "$config_file"
