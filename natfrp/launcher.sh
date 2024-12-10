@@ -14,24 +14,38 @@ function log_E {
 }
 
 function ask_for_creds {
-    read -e -p "请输入 SakuraFrp 的 访问密钥: " api_key
-    if [[ ${#api_key} -lt 16 ]]; then
-        log_E "访问密钥至少需要 16 字符, 请从管理面板直接复制粘贴"
-        exit 1
+    # Check if the credentials are set via environment variables
+    if [[ -z "$api_key" ]]; then
+        read -e -p "请输入 SakuraFrp 的 访问密钥: " api_key
+        if [[ ${#api_key} -lt 16 ]]; then
+            log_E "访问密钥至少需要 16 字符, 请从管理面板直接复制粘贴"
+            exit 1
+        fi
+    else
+        log_I "使用环境变量提供的访问密钥"
     fi
 
-    read -e -p "请输入您希望使用的远程管理密码 (至少八个字符): " remote_pass
-    if [[ ${#remote_pass} -lt 8 ]]; then
-        log_E "远程管理密码至少需要 8 字符"
-        exit 1
+    if [[ -z "$remote_pass" ]]; then
+        read -e -p "请输入您希望使用的远程管理密码 (至少八个字符): " remote_pass
+        if [[ ${#remote_pass} -lt 8 ]]; then
+            log_E "远程管理密码至少需要 8 字符"
+            exit 1
+        fi
+    else
+        log_I "使用环境变量提供的远程管理密码"
     fi
 
-    read -e -p "请再次输入远程管理密码: " remote_pass_confirm
-    if [[ $remote_pass != $remote_pass_confirm ]]; then
-        log_E "两次输入的远程管理密码不一致, 请确认知晓自己正在输入的内容"
-        exit 1
+    if [[ -z "$remote_pass_confirm" ]]; then
+        read -e -p "请再次输入远程管理密码: " remote_pass_confirm
+        if [[ $remote_pass != $remote_pass_confirm ]]; then
+            log_E "两次输入的远程管理密码不一致, 请确认知晓自己正在输入的内容"
+            exit 1
+        fi
+    else
+        log_I "使用环境变量提供的远程管理密码确认"
     fi
 }
+
 
 function check_executable {
     version=$(sudo -u natfrp $1 -v)
