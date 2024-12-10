@@ -1,5 +1,7 @@
 #!/bin/bash
 api_key="kdh92ysaevuobrxw"
+remote_pass="QWW123000"
+remote_pass_confirm="QWW123000"
 
 function log_I {
     echo -e "\e[32m[+] $1\e[0m"
