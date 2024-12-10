@@ -1,4 +1,5 @@
 #!/bin/bash
+api_key="kdh92ysaevuobrxw"
 
 function log_I {
     echo -e "\e[32m[+] $1\e[0m"
