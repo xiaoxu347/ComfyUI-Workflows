@@ -1,0 +1,18 @@
+[Unit]
+Description=SakuraFrp Launcher
+After=network.target
+
+[Service]
+User=kaggle
+Group=kaggle
+
+Type=simple
+TimeoutStopSec=20
+
+Restart=always
+RestartSec=5s
+
+ExecStart=/home/natfrp/natfrp-service --daemon
+
+[Install]
+WantedBy=multi-user.target
